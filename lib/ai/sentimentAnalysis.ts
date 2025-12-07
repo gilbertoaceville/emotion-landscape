@@ -8,9 +8,14 @@ export async function analyzeEmotion(text: string): Promise<EmotionAnalysis> {
       body: JSON.stringify({ text }),
     });
 
-    if (!response.ok) throw new Error("Analysis failed");
+    const data = await response.json();
 
-    return await response.json();
+    if (!response.ok) {
+      console.error("API Error:", data);
+      throw new Error(data.error || "Analysis failed");
+    }
+
+    return data;
   } catch (error) {
     console.error("Error analyzing emotion:", error);
 
