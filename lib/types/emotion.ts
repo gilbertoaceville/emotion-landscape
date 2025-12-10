@@ -49,7 +49,7 @@ export interface Landscape {
   text: string;
   analysis: EmotionAnalysis;
   params: LandscapeParams;
-  createdAt: string;
+  created_at: string;
   userId?: string;
   isPublic: boolean;
   likes: number;
