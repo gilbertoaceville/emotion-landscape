@@ -4,6 +4,7 @@ import { useState } from "react";
 import { Canvas } from "@react-three/fiber";
 import { OrbitControls, PerspectiveCamera } from "@react-three/drei";
 import { Terrain } from "./Terrain";
+import { Particles } from "./Particles";
 import { TextInput } from "@/components/input/TextInput";
 import { EmotionDisplay } from "@/components/input/EmotionDisplay";
 import { analyzeEmotion } from "@/lib/ai/sentimentAnalysis";
@@ -53,6 +54,7 @@ export function Scene() {
           <directionalLight position={[10, 20, 5]} intensity={1} />
 
           <Terrain params={landscapeParams} />
+          <Particles params={landscapeParams} />
         </Canvas>
       </div>
 
