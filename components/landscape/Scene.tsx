@@ -7,8 +7,10 @@ import { Terrain } from "./Terrain";
 import { Particles } from "./Particles";
 import { TextInput } from "@/components/input/TextInput";
 import { EmotionDisplay } from "@/components/input/EmotionDisplay";
+import { SaveModal } from "@/components/input/SaveModal";
 import { analyzeEmotion } from "@/lib/ai/sentimentAnalysis";
 import { mapEmotionToVisuals } from "@/lib/three/emotionMapper";
+import { saveLandscape } from "@/lib/data/landscapes-client";
 import { LandscapeParams, EmotionAnalysis } from "@/lib/types/emotion";
 
 export function Scene() {
@@ -17,9 +19,12 @@ export function Scene() {
   const [landscapeParams, setLandscapeParams] = useState<LandscapeParams>(
     mapEmotionToVisuals("calm", 0.5)
   );
+  const [showSaveModal, setShowSaveModal] = useState(false);
+  const [currentText, setCurrentText] = useState("");
 
   const handleAnalyze = async (text: string) => {
     setIsAnalyzing(true);
+    setCurrentText(text);
 
     try {
       const newAnalysis = await analyzeEmotion(text);
@@ -37,9 +42,27 @@ export function Scene() {
     }
   };
 
+  const handleSave = async (title: string) => {
+    if (!analysis) return;
+
+    const result = await saveLandscape(
+      title,
+      currentText,
+      analysis,
+      landscapeParams
+    );
+
+    if (result) {
+      setShowSaveModal(false);
+      alert("Landscape saved! 🎉");
+    } else {
+      alert("Failed to save landscape");
+    }
+  };
+
   return (
     <div className="relative w-full h-screen">
-      <div className="absolute inset-0 bg-gradient-to-b from-gray-900 to-black">
+      <div className="absolute inset-0 bg-linear-to-b from-gray-900 to-black">
         <Canvas>
           <PerspectiveCamera makeDefault position={[0, 20, 30]} />
 
@@ -58,8 +81,18 @@ export function Scene() {
         </Canvas>
       </div>
 
-      <EmotionDisplay analysis={analysis} />
+      <EmotionDisplay
+        analysis={analysis}
+        onSave={() => setShowSaveModal(true)}
+      />
       <TextInput onAnalyze={handleAnalyze} isAnalyzing={isAnalyzing} />
+
+      {showSaveModal && (
+        <SaveModal
+          onSave={handleSave}
+          onClose={() => setShowSaveModal(false)}
+        />
+      )}
     </div>
   );
 }

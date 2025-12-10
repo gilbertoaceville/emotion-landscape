@@ -37,7 +37,7 @@ export function EmotionDisplay({ analysis, onSave }: EmotionDisplayProps) {
         {onSave && (
           <button
             onClick={onSave}
-            className="px-4 py-2 bg-linear-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white rounded-lg font-semibold flex items-center gap-2 text-sm"
+            className="px-4 py-2 ml-6 bg-linear-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white rounded-lg font-semibold flex items-center gap-2 text-sm"
           >
             <Save size={16} />
             Save
